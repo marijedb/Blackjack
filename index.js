@@ -1,3 +1,4 @@
+let namePlayer = false;
 let chips = 20;
 let cards = [];
 let cardsHouse = [];
@@ -12,8 +13,7 @@ let sumEl = document.getElementById("sum-el");
 let houseCards = document.getElementById("house-cards-el");
 let cardsEl = document.getElementById("cards-el");
 let playerEl = document.getElementById("player-el");
-// let namePlayer = prompt("What is your name?");
-let namePlayer = "Marije";
+let inputField = document.getElementById("input");
 
 let player = {
     name: namePlayer,
@@ -24,7 +24,7 @@ let player = {
 }
 
 //Initialize starting text
-playerEl.textContent = player.name + ": $" + chips;
+
 
 function getRandomCard() {
     let randomNumber = Math.floor( Math.random()*13 ) + 1
@@ -39,7 +39,8 @@ function getRandomCard() {
 
 function startGame() {
     checkBalance();
-    if(balance === true) {
+    checkName();
+    if(balance === true && namePlayer === true) {
         resetGame();
         isAlive = true;
         let firstCard = getRandomCard();
@@ -51,7 +52,7 @@ function startGame() {
         sumPlayer = firstCard + secondCard;
         sumHouse = houseFirstCard + houseSecondCard;
         renderGame();
-    }
+    } 
 }
 
 function renderGame() {
@@ -143,6 +144,20 @@ function checkBalance(){
     if(chips <= 0){
         message = "YOU LOST. YOU HAVE NO BALANCE LEFT. REFRESH THE PAGE FOR A NEW GAME!"
         balance = false;
-    }
+    } 
     messageEl.textContent = message;
+}
+
+function changeName(name){
+    player.name = name;
+    inputField.value = ""
+    playerEl.textContent = player.name + ": $" + chips;
+    namePlayer = true;
+    messageEl.textContent = "Click on START GAME to start playing";
+}
+
+function checkName() {
+    if(namePlayer === false) {
+        messageEl.textContent = "Please enter your name to start playing";
+     } 
 }
