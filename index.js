@@ -1,14 +1,19 @@
 let chips = 20;
-let cards = []
-let sum = 0
-let hasBlackJack = false
-let isAlive = false
-let message = ""
-let messageEl = document.getElementById("message-el")
-let sumEl = document.getElementById("sum-el")
-let cardsEl = document.getElementById("cards-el")
-let playerEl = document.getElementById("player-el")
-let namePlayer = prompt("What is your name?");
+let cards = [];
+let cardsHouse = [];
+let sumPlayer = 0;
+let sumHouse = 0;
+let hasBlackJack = false;
+let isAlive = false;
+let message = "";
+let balance = true;
+let messageEl = document.getElementById("message-el");
+let sumEl = document.getElementById("sum-el");
+let houseCards = document.getElementById("house-cards-el");
+let cardsEl = document.getElementById("cards-el");
+let playerEl = document.getElementById("player-el");
+// let namePlayer = prompt("What is your name?");
+let namePlayer = "Marije";
 
 let player = {
     name: namePlayer,
@@ -19,55 +24,125 @@ let player = {
 }
 
 //Initialize starting text
-playerEl.textContent = player.name + ": $" + chips
+playerEl.textContent = player.name + ": $" + chips;
 
 function getRandomCard() {
     let randomNumber = Math.floor( Math.random()*13 ) + 1
     if (randomNumber > 10) {
-        return 10
+        return 10;
     } else if (randomNumber === 1) {
-        return 11
+        return 11;
     } else {
         return randomNumber
     }
 }
 
 function startGame() {
-    isAlive = true
-    let firstCard = getRandomCard()
-    let secondCard = getRandomCard()
-    cards = [firstCard, secondCard]
-    sum = firstCard + secondCard
-    renderGame()
+    checkBalance();
+    if(balance === true) {
+        resetGame();
+        isAlive = true;
+        let firstCard = getRandomCard();
+        let secondCard = getRandomCard();
+        let houseFirstCard = getRandomCard();
+        let houseSecondCard = getRandomCard();
+        cards.push(firstCard, secondCard);
+        cardsHouse.push(houseFirstCard, houseSecondCard);
+        sumPlayer = firstCard + secondCard;
+        sumHouse = houseFirstCard + houseSecondCard;
+        renderGame();
+    }
 }
 
 function renderGame() {
-    cardsEl.textContent = "Cards: "
+    cardsEl.textContent = "Your cards: "
     for (let i = 0; i < cards.length; i++) {
-        cardsEl.textContent += cards[i] + " "
+        cardsEl.textContent += cards[i] + " ";
     }
-    
-    sumEl.textContent = "Sum: " + sum
-    if (sum <= 20) {
-        message = "Do you want to draw a new card?"
-    } else if (sum === 21) {
-        message = "You've got Blackjack!"
-        hasBlackJack = true
+    houseCards.textContent = "Card(s) of the house: HIDDEN CARD "
+    for (let i = 1; i < cardsHouse.length; i++) {
+        houseCards.textContent += cardsHouse[i] + " ";
+    }
+    sumEl.textContent = "Sum: " + sumPlayer;
+    if (sumPlayer <= 20) {
+        message = "Do you want to draw a new card?";
+    } else if (sumPlayer === 21) {
+        message = "You've got Blackjack! You won $50!";
+        hasBlackJack = true;
         player.chips(50);
     } else {
-        message = "You're out of the game!"
-        isAlive = false
+        message = "You're out of the game and lost $10!";
+        isAlive = false;
         player.chips(-10);
     }
-    messageEl.textContent = message
+    messageEl.textContent = message;
 }
 
 
 function newCard() {
     if (isAlive === true && hasBlackJack === false) {
-        let card = getRandomCard()
-        sum += card
-        cards.push(card)
-        renderGame()        
+        let card = getRandomCard();
+        sumPlayer += card;
+        cards.push(card);
+        renderGame();
     }
+}
+
+function stand(){
+    if(isAlive === true) {
+        houseCards.textContent = "Card(s) of the house: " 
+        for (let i = 0; i < cardsHouse.length; i++) {
+            houseCards.textContent += cardsHouse[i] + " ";
+        }
+    
+        while(sumHouse < sumPlayer){
+            let card = getRandomCard();
+            sumHouse += card;
+            cardsHouse.push(card);
+            houseCards.textContent = "Card(s) of the house: "
+            for (let i = 0; i < cardsHouse.length; i++) {
+                houseCards.textContent += cardsHouse[i] + " ";
+            }
+        }
+    
+    
+        if(sumHouse > sumPlayer && sumHouse <= 20) {
+            // HOUSE WON! You lost $10
+            message = "HOUSE WON! You lost $10";
+            player.chips(-10);
+            isAlive = false;
+        } else if(sumHouse > 21){
+            message = "You won! $10 is added to your balance";
+            player.chips(10);
+            isAlive = false;
+        } else if (sumHouse === sumPlayer){
+            message = "It's a tie. Balance remains the same.";
+            isAlive = false;
+        } else {
+            message = "House has BLACKJACK! You lost $10";
+            player.chips(-10);
+            isAlive = false;
+        }
+        messageEl.textContent = message;
+    
+        checkBalance();
+    }
+}
+
+function resetGame(){
+    cards = [];
+    cardsHouse = [];
+    sumPlayer = 0;
+    sumHouse = 0;
+    hasBlackJack = false;
+    isAlive = false;
+    message = "";
+}
+
+function checkBalance(){
+    if(chips <= 0){
+        message = "YOU LOST. YOU HAVE NO BALANCE LEFT. REFRESH THE PAGE FOR A NEW GAME!"
+        balance = false;
+    }
+    messageEl.textContent = message;
 }
