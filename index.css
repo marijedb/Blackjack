@@ -9,20 +9,29 @@ body {
 
 h1 {
     color: goldenrod;
+    font-size: 5rem;
+    margin: 35px auto;
+}
+
+p {
+    font-size: 1.4rem;
 }
 
 #message-el {
     font-style: italic;
     font-size: 2rem;
+    margin-top: 13px;
 }
 
 button {
     color: #016f32;
     width: 150px;
     background: goldenrod;
-    padding-top: 5px;
+    width: 200px;
+    padding-top: 7px;
     padding-bottom: 5px;
     font-weight: bold;
+    font-size: 20px;
     border: none;
     border-radius: 2px;
     margin-bottom: 2px;
