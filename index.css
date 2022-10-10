@@ -23,7 +23,14 @@ p {
     margin-top: 13px;
 }
 
-button {
+.buttons {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.btn {
     color: #016f32;
     width: 150px;
     background: goldenrod;
@@ -38,9 +45,10 @@ button {
     margin-top: 2px;
 }
 
-.buttons {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+.btn-name {
+    margin-top: 10px;
+}
+
+#input {
+    height: 35px;
 }

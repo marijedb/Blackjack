@@ -3,15 +3,17 @@
         <link rel="stylesheet" href="index.css">
     </head>
     <body>
+        <input id="input" type="text" onchange="changeName(this.value)" placeholder="Enter your name">
+        <input class="btn btn-name" type="button" value="Submit">
         <h1>Blackjack</h1>
-        <p id="message-el">Want to play a round?</p>
+        <p id="message-el">Please enter your name to start playing</p>
         <p id="house-cards-el">Card(s) of the house:</p>
         <p id="cards-el">Your cards:</p>
         <p id="sum-el">Sum:</p>
         <div class="buttons">
-            <button onclick="startGame()">START GAME</button>
-            <button onclick="newCard()">NEW CARD</button>
-            <button onclick="stand()">STAND</button>
+            <button class="btn" onclick="startGame()">START GAME</button>
+            <button class="btn" onclick="newCard()">NEW CARD</button>
+            <button class="btn" onclick="stand()">STAND</button>
         </div>
         <p id="player-el"></p>
         <script src="index.js"></script>
